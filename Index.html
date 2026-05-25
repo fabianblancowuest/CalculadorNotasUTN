@@ -1,482 +1,116 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calculadora de Notas - Programación Web Básica</title>
-    <style>
-      :root {
-        --bg: #0f172a;
-        --card: #111827;
-        --card-2: #1f2937;
-        --text: #f8fafc;
-        --muted: #cbd5e1;
-        --accent: #38bdf8;
-        --success: #22c55e;
-        --warning: #facc15;
-        --danger: #ef4444;
-        --border: #334155;
-      }
 
-      * {
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Notas - Programación Web Básica</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
 
-      body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: linear-gradient(135deg, #020617, #0f172a);
-        color: var(--text);
-        min-height: 100vh;
-        padding: 24px;
-      }
+<body>
+  <main class="container">
+    <section class="header">
+      <h1>Calculadora de Notas</h1>
+      <p>Programación Web Básica - carga por cantidad de errores</p>
+    </section>
 
-      .container {
-        max-width: 920px;
-        margin: 0 auto;
-      }
-
-      .header {
-        text-align: center;
-        margin-bottom: 24px;
-      }
-
-      .header h1 {
-        margin: 0 0 8px;
-        font-size: 32px;
-        color: var(--accent);
-      }
-
-      .header p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 16px;
-      }
-
-      .card {
-        background: rgba(17, 24, 39, 0.95);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 22px;
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-        margin-bottom: 18px;
-      }
-
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 14px;
-      }
-
-      .item {
-        background: var(--card-2);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 16px;
-      }
-
-      label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 8px;
-        line-height: 1.3;
-      }
-
-      .detalle {
-        color: var(--muted);
-        font-size: 13px;
-        margin-bottom: 10px;
-      }
-
-      input {
-        width: 100%;
-        padding: 12px;
-        font-size: 18px;
-        border-radius: 10px;
-        border: 1px solid var(--border);
-        outline: none;
-        background: #020617;
-        color: var(--text);
-        text-align: center;
-      }
-
-      input:focus {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-      }
-
-      .resultado {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-        text-align: center;
-      }
-
-      .box {
-        background: #020617;
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 18px;
-      }
-
-      .box span {
-        display: block;
-        color: var(--muted);
-        font-size: 14px;
-        margin-bottom: 8px;
-      }
-
-      .box strong {
-        font-size: 34px;
-        color: var(--accent);
-      }
-
-      .estado {
-        font-size: 30px !important;
-      }
-
-      .excelente {
-        color: var(--success) !important;
-      }
-      .muy-bueno {
-        color: #84cc16 !important;
-      }
-      .bueno {
-        color: var(--accent) !important;
-      }
-      .aprobado {
-        color: var(--warning) !important;
-      }
-      .desaprobado {
-        color: var(--danger) !important;
-      }
-
-      .acciones {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 18px;
-      }
-
-      button {
-        border: none;
-        border-radius: 12px;
-        padding: 12px 18px;
-        font-size: 15px;
-        font-weight: bold;
-        cursor: pointer;
-        background: var(--accent);
-        color: #082f49;
-      }
-
-      button.secondary {
-        background: #334155;
-        color: var(--text);
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        overflow: hidden;
-        border-radius: 12px;
-        margin-top: 10px;
-      }
-
-      th,
-      td {
-        border-bottom: 1px solid var(--border);
-        padding: 10px;
-        text-align: left;
-        font-size: 14px;
-      }
-
-      th {
-        color: var(--accent);
-        background: #020617;
-      }
-
-      .nota {
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.5;
-      }
-
-      @media (max-width: 800px) {
-        .grid,
-        .resultado {
-          grid-template-columns: 1fr;
-        }
-
-        .header h1 {
-          font-size: 25px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <main class="container">
-      <section class="header">
-        <h1>Calculadora de Notas</h1>
-        <p>Programación Web Básica - carga por cantidad de errores</p>
-      </section>
-
-      <section class="card">
-        <div class="grid">
-          <div class="item">
-            <label for="erroresVF">Parte I - Verdadero/Falso</label>
-            <div class="detalle">12 consignas · 3 puntos c/u · Total 36</div>
-            <input
-              id="erroresVF"
-              type="number"
-              min="0"
-              max="12"
-              value="0"
-              oninput="calcularNota()"
-            />
-          </div>
-
-          <div class="item">
-            <label for="erroresMultiple">Parte II - Opción múltiple</label>
-            <div class="detalle">8 consignas · 4 puntos c/u · Total 32</div>
-            <input
-              id="erroresMultiple"
-              type="number"
-              min="0"
-              max="8"
-              value="0"
-              oninput="calcularNota()"
-            />
-          </div>
-
-          <div class="item">
-            <label for="erroresCompletar">Completar oración</label>
-            <div class="detalle">6 consignas · 3 puntos c/u · Total 18</div>
-            <input
-              id="erroresCompletar"
-              type="number"
-              min="0"
-              max="6"
-              value="0"
-              oninput="calcularNota()"
-            />
-          </div>
-
-          <div class="item">
-            <label for="erroresCasos">Casos prácticos</label>
-            <div class="detalle">4 consignas · 3,5 puntos c/u · Total 14</div>
-            <input
-              id="erroresCasos"
-              type="number"
-              min="0"
-              max="4"
-              value="0"
-              oninput="calcularNota()"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section class="card resultado">
-        <div class="box">
-          <span>Puntaje obtenido</span>
-          <strong id="puntaje">100</strong>
-        </div>
-        <div class="box">
-          <span>Nota final redondeada</span>
-          <strong id="notaFinal">100</strong>
-        </div>
-        <div class="box">
-          <span>Calificación</span>
-          <strong id="calificacion" class="estado excelente">Excelente</strong>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>Detalle de cálculo</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Sección</th>
-              <th>Errores</th>
-              <th>Descuento</th>
-              <th>Puntaje</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Verdadero/Falso</td>
-              <td id="dErroresVF">0</td>
-              <td id="dDescVF">0</td>
-              <td id="dPuntosVF">36</td>
-            </tr>
-            <tr>
-              <td>Opción múltiple</td>
-              <td id="dErroresMultiple">0</td>
-              <td id="dDescMultiple">0</td>
-              <td id="dPuntosMultiple">32</td>
-            </tr>
-            <tr>
-              <td>Completar oración</td>
-              <td id="dErroresCompletar">0</td>
-              <td id="dDescCompletar">0</td>
-              <td id="dPuntosCompletar">18</td>
-            </tr>
-            <tr>
-              <td>Casos prácticos</td>
-              <td id="dErroresCasos">0</td>
-              <td id="dDescCasos">0</td>
-              <td id="dPuntosCasos">14</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="acciones">
-          <button onclick="calcularNota()">Calcular</button>
-          <button class="secondary" onclick="limpiar()">Limpiar</button>
+    <section class="card">
+      <div class="grid">
+        <div class="item">
+          <label for="erroresVF">Parte I - Verdadero/Falso</label>
+          <div class="detalle">12 consignas · 3 puntos c/u · Total 36</div>
+          <input id="erroresVF" type="number" min="0" max="12" value="0" oninput="calcularNota()" />
         </div>
 
-        <p class="nota">
-          La nota se calcula sobre 100 puntos y se muestra redondeada, sin comas
-          ni decimales. En la sección de casos prácticos, cada error descuenta
-          3,5 puntos, pero el resultado final se redondea automáticamente.
-        </p>
-      </section>
-    </main>
+        <div class="item">
+          <label for="erroresMultiple">Parte II - Opción múltiple</label>
+          <div class="detalle">8 consignas · 4 puntos c/u · Total 32</div>
+          <input id="erroresMultiple" type="number" min="0" max="8" value="0" oninput="calcularNota()" />
+        </div>
 
-    <script>
-      const configuracion = {
-        vf: { maxErrores: 12, puntosPorError: 3, total: 36 },
-        multiple: { maxErrores: 8, puntosPorError: 4, total: 32 },
-        completar: { maxErrores: 6, puntosPorError: 3, total: 18 },
-        casos: { maxErrores: 4, puntosPorError: 3.5, total: 14 },
-      };
+        <div class="item">
+          <label for="erroresCompletar">Completar oración</label>
+          <div class="detalle">6 consignas · 3 puntos c/u · Total 18</div>
+          <input id="erroresCompletar" type="number" min="0" max="6" value="0" oninput="calcularNota()" />
+        </div>
 
-      function obtenerErrores(id, maximo) {
-        const input = document.getElementById(id);
-        let valor = parseInt(input.value, 10);
+        <div class="item">
+          <label for="erroresCasos">Casos prácticos</label>
+          <div class="detalle">4 consignas · 3,5 puntos c/u · Total 14</div>
+          <input id="erroresCasos" type="number" min="0" max="4" value="0" oninput="calcularNota()" />
+        </div>
+      </div>
+    </section>
 
-        if (isNaN(valor) || valor < 0) valor = 0;
-        if (valor > maximo) valor = maximo;
+    <section class="card resultado">
+      <div class="box">
+        <span>Puntaje obtenido</span>
+        <strong id="puntaje">100</strong>
+      </div>
+      <div class="box">
+        <span>Nota final redondeada</span>
+        <strong id="notaFinal">100</strong>
+      </div>
+      <div class="box">
+        <span>Calificación</span>
+        <strong id="calificacion" class="estado excelente">Excelente</strong>
+      </div>
+    </section>
 
-        input.value = valor;
-        return valor;
-      }
+    <section class="card">
+      <h2>Detalle de cálculo</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Sección</th>
+            <th>Errores</th>
+            <th>Descuento</th>
+            <th>Puntaje</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Verdadero/Falso</td>
+            <td id="dErroresVF">0</td>
+            <td id="dDescVF">0</td>
+            <td id="dPuntosVF">36</td>
+          </tr>
+          <tr>
+            <td>Opción múltiple</td>
+            <td id="dErroresMultiple">0</td>
+            <td id="dDescMultiple">0</td>
+            <td id="dPuntosMultiple">32</td>
+          </tr>
+          <tr>
+            <td>Completar oración</td>
+            <td id="dErroresCompletar">0</td>
+            <td id="dDescCompletar">0</td>
+            <td id="dPuntosCompletar">18</td>
+          </tr>
+          <tr>
+            <td>Casos prácticos</td>
+            <td id="dErroresCasos">0</td>
+            <td id="dDescCasos">0</td>
+            <td id="dPuntosCasos">14</td>
+          </tr>
+        </tbody>
+      </table>
 
-      function calcularSeccion(errores, puntosPorError, total) {
-        const descuento = errores * puntosPorError;
-        const puntaje = Math.max(total - descuento, 0);
-        return { descuento, puntaje };
-      }
+      <div class="acciones">
+        <button onclick="calcularNota()">Calcular</button>
+        <button class="secondary" onclick="limpiar()">Limpiar</button>
+      </div>
 
-      function definirCalificacion(puntaje) {
-        if (puntaje >= 90) return { texto: "Excelente", clase: "excelente" };
-        if (puntaje >= 80) return { texto: "Muy bueno", clase: "muy-bueno" };
-        if (puntaje >= 70) return { texto: "Bueno", clase: "bueno" };
-        if (puntaje >= 60) return { texto: "Aprobado", clase: "aprobado" };
-        return { texto: "Desaprobado", clase: "desaprobado" };
-      }
+      <p class="nota">
+        La nota se calcula sobre 100 puntos y se muestra redondeada, sin comas
+        ni decimales. En la sección de casos prácticos, cada error descuenta
+        3,5 puntos, pero el resultado final se redondea automáticamente.
+      </p>
+    </section>
+  </main>
 
-      function mostrarNumero(valor) {
-        return Math.round(valor).toString();
-      }
+  <script src="js/app.js" defer></script>
+</body>
 
-      function calcularNota() {
-        const erroresVF = obtenerErrores(
-          "erroresVF",
-          configuracion.vf.maxErrores,
-        );
-        const erroresMultiple = obtenerErrores(
-          "erroresMultiple",
-          configuracion.multiple.maxErrores,
-        );
-        const erroresCompletar = obtenerErrores(
-          "erroresCompletar",
-          configuracion.completar.maxErrores,
-        );
-        const erroresCasos = obtenerErrores(
-          "erroresCasos",
-          configuracion.casos.maxErrores,
-        );
-
-        const vf = calcularSeccion(
-          erroresVF,
-          configuracion.vf.puntosPorError,
-          configuracion.vf.total,
-        );
-        const multiple = calcularSeccion(
-          erroresMultiple,
-          configuracion.multiple.puntosPorError,
-          configuracion.multiple.total,
-        );
-        const completar = calcularSeccion(
-          erroresCompletar,
-          configuracion.completar.puntosPorError,
-          configuracion.completar.total,
-        );
-        const casos = calcularSeccion(
-          erroresCasos,
-          configuracion.casos.puntosPorError,
-          configuracion.casos.total,
-        );
-
-        const puntajeExacto =
-          vf.puntaje + multiple.puntaje + completar.puntaje + casos.puntaje;
-        const puntajeRedondeado = Math.round(puntajeExacto);
-        const calificacion = definirCalificacion(puntajeRedondeado);
-
-        document.getElementById("puntaje").textContent =
-          mostrarNumero(puntajeExacto);
-        document.getElementById("notaFinal").textContent = puntajeRedondeado;
-
-        const calificacionElemento = document.getElementById("calificacion");
-        calificacionElemento.textContent = calificacion.texto;
-        calificacionElemento.className = "estado " + calificacion.clase;
-
-        document.getElementById("dErroresVF").textContent = erroresVF;
-        document.getElementById("dDescVF").textContent = mostrarNumero(
-          vf.descuento,
-        );
-        document.getElementById("dPuntosVF").textContent = mostrarNumero(
-          vf.puntaje,
-        );
-
-        document.getElementById("dErroresMultiple").textContent =
-          erroresMultiple;
-        document.getElementById("dDescMultiple").textContent = mostrarNumero(
-          multiple.descuento,
-        );
-        document.getElementById("dPuntosMultiple").textContent = mostrarNumero(
-          multiple.puntaje,
-        );
-
-        document.getElementById("dErroresCompletar").textContent =
-          erroresCompletar;
-        document.getElementById("dDescCompletar").textContent = mostrarNumero(
-          completar.descuento,
-        );
-        document.getElementById("dPuntosCompletar").textContent = mostrarNumero(
-          completar.puntaje,
-        );
-
-        document.getElementById("dErroresCasos").textContent = erroresCasos;
-        document.getElementById("dDescCasos").textContent = mostrarNumero(
-          casos.descuento,
-        );
-        document.getElementById("dPuntosCasos").textContent = mostrarNumero(
-          casos.puntaje,
-        );
-      }
-
-      function limpiar() {
-        document.getElementById("erroresVF").value = 0;
-        document.getElementById("erroresMultiple").value = 0;
-        document.getElementById("erroresCompletar").value = 0;
-        document.getElementById("erroresCasos").value = 0;
-        calcularNota();
-      }
-
-      calcularNota();
-    </script>
-  </body>
 </html>
